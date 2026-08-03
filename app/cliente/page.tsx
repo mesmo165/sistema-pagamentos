@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function Cliente() {
     const [nomeEmpresa, setNomeEmpresa] = useState("Nome da Empresa");
@@ -36,16 +37,27 @@ const id = params.get("id");
   const mensagem = localStorage.getItem("mensagemCliente");
   const pix = localStorage.getItem("codigoPix");
   const logo = localStorage.getItem("logoEmpresa");
-const pagamentoSalvo = localStorage.getItem("pagamento_" + id);
+(async () => {
+  const { data: pagamento, error } = await supabase
+    .from("pagamentos")
+    .select("*")
+    .eq("id", id)
+    .single();
+    console.log("Pagamento encontrado:", pagamento);
+    console.log("Erro:", error);
 
-if (pagamentoSalvo) {
-  const pagamento = JSON.parse(pagamentoSalvo);
+  if (error || !pagamento) {
+    setLinkDesativado(true);
+    return;
+  }
+
   if (!pagamento.ativo) {
     setLinkDesativado(true);
     return;
-}
+  }
 
   setCliente(pagamento.nome);
+
   setValor(
     Number(pagamento.valor).toLocaleString("pt-BR", {
       minimumFractionDigits: 2,
@@ -55,12 +67,12 @@ if (pagamentoSalvo) {
 
   setPedido("#" + pagamento.id.slice(-4));
   setStatus(pagamento.status);
-}
+  setLogoEmpresa(pagamento.logo || "");
+setNomeEmpresa(pagamento.nome_empresa || "");
+setMensagemCliente(pagamento.mensagem || "");
+setCodigoPix(pagamento.codigo_pix || "");
+})();
 
-if (logo) setLogoEmpresa(logo);
-if (nome) setNomeEmpresa(nome);
-  if (mensagem) setMensagemCliente(mensagem);
-  if (pix) setCodigoPix(pix);
 }, []);
 useEffect(() => {
   const intervalo = setInterval(() => {

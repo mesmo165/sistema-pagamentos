@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 type Pagamento = {
   id: string
@@ -149,7 +150,7 @@ if (!logado) {1
   );
 }
 
-  function registrarPagamento() {
+  async function registrarPagamento() {
     if (!nome || !valor) return;
 const id = Date.now().toString();
 console.log("Valor digitado:", valor);
@@ -163,7 +164,35 @@ const pagamento = {
   data: new Date().toLocaleString("pt-BR"),
   status: "Aguardando",
   ativo: true,
+  
+  logo: logoEmpresa,
+  nome_empresa: nomeEmpresa,
+  codigo_pix: codigoPixEmpresa,
+  mensagem: mensagemCliente,
 };
+console.log("logoEmpresa:", logoEmpresa);
+console.log("nomeEmpresa:", nomeEmpresa);
+console.log("codigoPixEmpresa:", codigoPixEmpresa);
+console.log("mensagemCliente:", mensagemCliente);
+alert(
+  "nome_empresa: " + nomeEmpresa +
+  "\ncodigo_pix: " + codigoPixEmpresa +
+  "\nmensagem: " + mensagemCliente +
+  "\nlogo existe: " + (logoEmpresa ? "SIM" : "NÃO")
+);
+const { error } = await supabase
+  .from("pagamentos")
+  .insert([pagamento]);
+
+if (error) {
+    console.log(error);
+    alert(
+        "Código: " + error.code +
+        "\nMensagem: " + error.message +
+        "\nDetalhes: " + error.details
+    );
+    return;
+}
     setPagamentos([
   ...pagamentos,
   pagamento
@@ -184,10 +213,27 @@ const pagamento = {
     );
   }
 
-function alterarAtivo(index: number, ativo: boolean) {
+async function alterarAtivo(index: number, ativo: boolean) {
   const lista = [...pagamentos];
 
   lista[index].ativo = ativo;
+  console.log("ID:", lista[index].id);
+  const { data, error, count } = await supabase
+  .from("pagamentos")
+  .update({ ativo: ativo })
+  .eq("id", lista[index].id)
+  .select();
+
+  console.log("ID:", lista[index].id);
+console.log("NOVO ATIVO:", ativo);
+console.log("DATA:", data);
+console.log("ERROR:", error);
+console.log("COUNT:", count);
+
+
+if (error) {
+  alert(error.message);
+}
 
   setPagamentos(lista);
 
@@ -262,7 +308,7 @@ function copiarCodigoPix() {
   width: 420,
   maxHeight: "90vh",
   overflowY: "auto",
-  overflowX: "hidden",
+  overflowX: "auto",
 }}
     >
       <h2>Configurações</h2>
@@ -497,12 +543,13 @@ onClick={salvarConfiguracoes}
 </button>
 <div
   style={{
-    width: "100%",
-    maxWidth: 1000,
-    display: "flex",
-    gap: 15,
-    marginBottom: 20,
-  }}
+  width: "100%",
+  maxWidth: 1000,
+  display: "flex",
+  flexWrap: "wrap",
+  gap: 15,
+  marginBottom: 20,
+}}
 >
   <div
     style={{
