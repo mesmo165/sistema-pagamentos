@@ -281,16 +281,24 @@ const mediaRecebida =
   pagamentos.length > 0
     ? totalRecebido / pagamentos.length
     : 0;
-function salvarConfiguracoes() {
-  localStorage.setItem("nomeEmpresa", nomeEmpresa);
-localStorage.setItem("codigoPix", codigoPixEmpresa);
+async function salvarConfiguracoes() {
+  const { error } = await supabase
+    .from("configuracoes")
+    .update({
+      nome_empresa: nomeEmpresa,
+      mensagem_cliente: mensagemCliente,
+      logo: logoEmpresa,
+      qr_pix: qrCodeEmpresa,
+      pix_copia_cola: codigoPixEmpresa,
+    })
+    .eq("id", 1);
 
-localStorage.setItem("mensagemCliente", mensagemCliente);
+  if (error) {
+    alert("Erro ao salvar: " + error.message);
+    return;
+  }
 
-localStorage.setItem("logoEmpresa", logoEmpresa);
-localStorage.setItem("qrCodeEmpresa", qrCodeEmpresa);
-
-alert("Configurações salvas com sucesso!");
+  alert("Configurações salvas com sucesso!");
 }
 function copiarCodigoPix() {
   navigator.clipboard.writeText(codigoPixEmpresa);
