@@ -112,20 +112,33 @@ if (!logado) {1
         <h2>Painel Administrativo</h2>
 
         <input
-          placeholder="Usuário"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-          style={{ width: "100%", padding: 10, marginBottom: 10 }}
-        />
+  placeholder="Usuário"
+  value={usuario}
+  onChange={(e) => setUsuario(e.target.value)}
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+    color: "#000",
+    background: "#fff",
+    WebkitTextFillColor: "#000",
+  }}
+/>
 
         <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          style={{ width: "100%", padding: 10, marginBottom: 15 }}
-        />
-
+  type="password"
+  placeholder="Senha"
+  value={senha}
+  onChange={(e) => setSenha(e.target.value)}
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 15,
+    color: "#000",
+    background: "#fff",
+    WebkitTextFillColor: "#000",
+  }}
+/>
         <button
           onClick={() => {
             if (usuario === "admin" && senha === "123456") {
