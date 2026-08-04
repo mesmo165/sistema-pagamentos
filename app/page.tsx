@@ -315,6 +315,7 @@ async function salvarConfiguracoes() {
 
 console.log("DATA:", data);
 console.log("ERROR:", error);
+console.log("NOME:", nomeEmpresa);
 
   if (error) {
     alert("Erro ao salvar: " + error.message);
