@@ -53,16 +53,25 @@ useEffect(() => {
 }
 
 carregarConfiguracoes();
-  const dados = localStorage.getItem("pagamentos");
+  async function carregarPagamentos() {
+  const { data, error } = await supabase
+    .from("pagamentos")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  if (dados) {
-    const lista = JSON.parse(dados).map((p: any) => ({
+  if (!error && data) {
+    setPagamentos(
+      data.map((p: any) => ({
         ...p,
-        ativo: p.ativo !== false
-    }));
-
-    setPagamentos(lista);
+        ativo: p.ativo !== false,
+      }))
+    );
+  } else {
+    console.log(error);
+  }
 }
+
+carregarPagamentos();
 /*
   const nomeSalvo = localStorage.getItem("nomeEmpresa");
   if (nomeSalvo) {
@@ -105,9 +114,6 @@ if (qrSalvo) {
 
 }, []);
 
-useEffect(() => {
-  localStorage.setItem("pagamentos", JSON.stringify(pagamentos));
-}, [pagamentos]);
 if (!logado) {1
   return (
     <main
@@ -229,8 +235,6 @@ if (error) {
   ...pagamentos,
   pagamento
 ]);
-
-    localStorage.setItem("pagamento_" + id, JSON.stringify(pagamento));
 
 
     setNome("");
