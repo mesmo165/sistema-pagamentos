@@ -302,16 +302,18 @@ const mediaRecebida =
     : 0;
 async function salvarConfiguracoes() {
   const { data, error } = await supabase
-    .from("configuracoes")
-    .update({
-      nome_empresa: nomeEmpresa,
-      mensagem_cliente: mensagemCliente,
-      logo: logoEmpresa,
-      qr_pix: qrCodeEmpresa,
-      pix_copia_cola: codigoPixEmpresa,
-    })
-    .eq("id", 1);
-    console.log("DATA:", data);
+  .from("configuracoes")
+  .update({
+    nome_empresa: nomeEmpresa,
+    mensagem_cliente: mensagemCliente,
+    logo: logoEmpresa,
+    qr_pix: qrCodeEmpresa,
+    pix_copia_cola: codigoPixEmpresa,
+  })
+  .eq("id", 1)
+  .select();
+
+console.log("DATA:", data);
 console.log("ERROR:", error);
 
   if (error) {
