@@ -63,7 +63,7 @@ carregarConfiguracoes();
 
     setPagamentos(lista);
 }
-
+/*
   const nomeSalvo = localStorage.getItem("nomeEmpresa");
   if (nomeSalvo) {
     setNomeEmpresa(nomeSalvo);
@@ -101,6 +101,7 @@ const qrSalvo = localStorage.getItem("qrCodeEmpresa");
 if (qrSalvo) {
   setQrCodeEmpresa(qrSalvo);
 }
+*/  
 
 }, []);
 
