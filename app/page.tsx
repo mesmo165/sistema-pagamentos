@@ -313,10 +313,9 @@ async function salvarConfiguracoes() {
   .eq("id", 1)
   .select();
 
+console.log("NOME:", nomeEmpresa);
 console.log("DATA:", data);
 console.log("ERROR:", error);
-console.log("NOME:", nomeEmpresa);
-
   if (error) {
     alert("Erro ao salvar: " + error.message);
     return;
