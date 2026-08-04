@@ -301,7 +301,7 @@ const mediaRecebida =
     ? totalRecebido / pagamentos.length
     : 0;
 async function salvarConfiguracoes() {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("configuracoes")
     .update({
       nome_empresa: nomeEmpresa,
@@ -311,6 +311,8 @@ async function salvarConfiguracoes() {
       pix_copia_cola: codigoPixEmpresa,
     })
     .eq("id", 1);
+    console.log("DATA:", data);
+console.log("ERROR:", error);
 
   if (error) {
     alert("Erro ao salvar: " + error.message);
