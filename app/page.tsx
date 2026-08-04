@@ -301,7 +301,7 @@ const mediaRecebida =
     ? totalRecebido / pagamentos.length
     : 0;
 async function salvarConfiguracoes() {
-  const { data, error } = await supabase
+  const resposta = await supabase
   .from("configuracoes")
   .update({
     nome_empresa: nomeEmpresa,
@@ -313,13 +313,12 @@ async function salvarConfiguracoes() {
   .eq("id", 1)
   .select();
 
+console.log(resposta);
 console.log("NOME:", nomeEmpresa);
-console.log("DATA:", data);
-console.log("ERROR:", error);
-  if (error) {
-    alert("Erro ao salvar: " + error.message);
-    return;
-  }
+if (resposta.error) {
+  alert("Erro ao salvar: " + resposta.error.message);
+  return;
+}
 
   alert("Configurações salvas com sucesso!");
 }
