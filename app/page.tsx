@@ -310,7 +310,6 @@ async function salvarConfiguracoes() {
     qr_pix: qrCodeEmpresa,
     pix_copia_cola: codigoPixEmpresa,
   })
-  .eq("id", 1)
   .select();
 
 console.log(resposta);
