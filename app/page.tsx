@@ -35,6 +35,24 @@ const [mensagemCliente, setMensagemCliente] = useState(
   "Após a confirmação do pagamento, seu pedido será registrado automaticamente em nosso sistema em seu nome. Nossa equipe iniciará o processamento assim que o pagamento for identificado."
 );
 useEffect(() => {
+  async function carregarConfiguracoes() {
+  const { data, error } = await supabase
+    .from("configuracoes")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (!error && data) {
+    setNomeEmpresa(data.nome_empresa || "");
+    setMensagemCliente(data.mensagem_cliente || "");
+    setLogoEmpresa(data.logo || "");
+    setFaviconEmpresa(data.favicon || "");
+    setQrCodeEmpresa(data.qr_pix || "");
+    setCodigoPixEmpresa(data.pix_copia_cola || "");
+  }
+}
+
+carregarConfiguracoes();
   const dados = localStorage.getItem("pagamentos");
 
   if (dados) {
